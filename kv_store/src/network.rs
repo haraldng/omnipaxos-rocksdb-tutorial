@@ -1,3 +1,4 @@
+use omnipaxos::messages::Message as OPMessage;
 use serde::{Deserialize, Serialize};
 use serde_json;
 use std::collections::HashMap;
@@ -12,6 +13,7 @@ use crate::{kv::KVCommand, server::APIResponse, NODES, PID as MY_PID};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub(crate) enum Message {
+    OmniPaxosMsg(OPMessage<KVCommand>),
     APIRequest(KVCommand),
     APIResponse(APIResponse),
 }

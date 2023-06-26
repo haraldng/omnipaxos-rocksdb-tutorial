@@ -2,7 +2,7 @@ version: "3.9"
 
 x-common-variables: &common-variables
   RUST_BACKTRACE: 1
-  NODES: "[1]"
+  NODES: "[1, 2, 3]"
 
 services:
   network-actor:
@@ -11,8 +11,8 @@ services:
     hostname: net
     environment:
       <<: *common-variables
-      PORT_MAPPINGS: "[]"
-      CLIENT_PORTS: "[8001]"
+      PORT_MAPPINGS: "[[8013,8031],[8012,8021],[8023,8032]]"
+      CLIENT_PORTS: "[8001, 8002, 8003]"
     ports: []
     stdin_open: true
     tty: true
@@ -24,5 +24,25 @@ services:
     environment:
       <<: *common-variables
       PID: 1
+    depends_on:
+      - network-actor
+
+  s2:
+    build: ./kv_store/
+    container_name: s2
+    hostname: s2
+    environment:
+      <<: *common-variables
+      PID: 2
+    depends_on:
+      - network-actor
+
+  s3:
+    build: ./kv_store/
+    container_name: s3
+    hostname: s3
+    environment:
+      <<: *common-variables
+      PID: 3
     depends_on:
       - network-actor
