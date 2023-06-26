@@ -371,8 +371,9 @@ dependencies = [
 
 [[package]]
 name = "omnipaxos"
-version = "0.1.0"
-source = "git+https://github.com/haraldng/omnipaxos#a9f7897066cf461fa9fa36e319871f307f7841ec"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "53984d6e0afdb9997fd211067a9fb57ebbffd9f8ec1f71b0eec560f7207655f2"
 dependencies = [
  "omnipaxos_macros",
  "serde",
@@ -380,9 +381,9 @@ dependencies = [
 
 [[package]]
 name = "omnipaxos_macros"
-version = "0.1.1"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a9a76858f3987b20ceb70963545081ca632527966d0464d263522874d8aae4cc"
+checksum = "9889c466474d6d9867b93cc34efcf743c91d11836ca9d73a4e5dd4d3f083c2a5"
 dependencies = [
  "quote",
  "syn 1.0.109",
@@ -390,8 +391,9 @@ dependencies = [
 
 [[package]]
 name = "omnipaxos_storage"
-version = "0.1.0"
-source = "git+https://github.com/haraldng/omnipaxos#a9f7897066cf461fa9fa36e319871f307f7841ec"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8697ae674e2577042401a3a90460c0c01d3be0c058fa73fd165ac01907989345"
 dependencies = [
  "bincode",
  "commitlog",
