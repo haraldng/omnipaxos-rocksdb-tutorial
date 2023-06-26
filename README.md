@@ -17,7 +17,7 @@ $ docker compose up --build -d
 ```
 (Note: Running this command for the first time can take a couple of minutes)
 
-Attach to the client (`network-actor``) to send requests to the cluster:
+Attach to the client (`network-actor`) to send requests to the cluster:
 ```bash
 $ docker attach network-actor
 ```
