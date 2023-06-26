@@ -66,8 +66,13 @@ impl Server {
             /*** reply client ***/
             let msg = Message::APIResponse(APIResponse::Decided(new_decided_idx));
             self.network.send(0, msg).await;
-
-            println!("Log: {:?}", self.omni_paxos.read_decided_suffix(0).unwrap());
+            // snapshotting
+            if new_decided_idx % 5 == 0 {
+                println!("Log before: {:?}", self.omni_paxos.read_decided_suffix(0).unwrap());
+                self.omni_paxos.snapshot(Some(new_decided_idx), true)
+                    .expect("Failed to snapshot");
+                println!("Log after: {:?}\n", self.omni_paxos.read_decided_suffix(0).unwrap());
+            }
         }
     }
 
