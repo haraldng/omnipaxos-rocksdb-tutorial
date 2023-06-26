@@ -1,6 +1,10 @@
 # OmniPaxos Demo
 This is a small demo of how to transform a simple single-server RocksDB service into a distributed version using OmniPaxos.
 
+Related resources:
+- [Blog post](https://omnipaxos.com/blog/building-distributed-rocksdb-with-omnipaxos-in-8-minutes/)
+- [Video](https://youtu.be/4VqB0-KOsms)
+
 ## Requirements
 We used the following:
 - Docker v.4.19.0 (for demo)
