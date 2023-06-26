@@ -1,0 +1,28 @@
+version: "3.9"
+
+x-common-variables: &common-variables
+  RUST_BACKTRACE: 1
+  NODES: "[1]"
+
+services:
+  network-actor:
+    build: ./network_actor/
+    container_name: network-actor
+    hostname: net
+    environment:
+      <<: *common-variables
+      PORT_MAPPINGS: "[]"
+      CLIENT_PORTS: "[8001]"
+    ports: []
+    stdin_open: true
+    tty: true
+  
+  s1:
+    build: ./kv_store/
+    container_name: s1
+    hostname: s1
+    environment:
+      <<: *common-variables
+      PID: 1
+    depends_on:
+      - network-actor
