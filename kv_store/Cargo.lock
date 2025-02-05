@@ -9,6 +9,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
 
 [[package]]
+name = "bincode"
+version = "1.3.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b1f45e9417d87227c7a56d22e471c6206462cba514c7590c09aff4cf6d1ddcad"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "bindgen"
 version = "0.65.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -34,6 +43,12 @@ name = "bitflags"
 version = "1.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bef38d45163c2f1dde094a7dfd33ccf595c92905c8f8f4fdc18d06fb1037718a"
+
+[[package]]
+name = "byteorder"
+version = "1.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1fd0f2584146f6f2ef48085050886acf353beff7305ebd1ae69500e27c67f64b"
 
 [[package]]
 name = "bytes"
@@ -122,6 +137,8 @@ name = "kv_demo"
 version = "0.1.0"
 dependencies = [
  "lazy_static",
+ "omnipaxos",
+ "omnipaxos_storage",
  "rocksdb",
  "serde",
  "serde_json",
@@ -234,6 +251,36 @@ checksum = "0fac9e2da13b5eb447a6ce3d392f23a29d8694bff781bf03a16cd9ac8697593b"
 dependencies = [
  "hermit-abi",
  "libc",
+]
+
+[[package]]
+name = "omnipaxos"
+version = "0.2.2"
+source = "git+https://github.com/haraldng/omnipaxos#1b6dd0d84c2c74dd1ed0dd73fad6ce980d9a1c5a"
+dependencies = [
+ "omnipaxos_macros",
+ "serde",
+]
+
+[[package]]
+name = "omnipaxos_macros"
+version = "0.1.3"
+source = "git+https://github.com/haraldng/omnipaxos#1b6dd0d84c2c74dd1ed0dd73fad6ce980d9a1c5a"
+dependencies = [
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "omnipaxos_storage"
+version = "0.2.2"
+source = "git+https://github.com/haraldng/omnipaxos#1b6dd0d84c2c74dd1ed0dd73fad6ce980d9a1c5a"
+dependencies = [
+ "bincode",
+ "omnipaxos",
+ "rocksdb",
+ "serde",
+ "zerocopy",
 ]
 
 [[package]]
@@ -510,6 +557,27 @@ name = "windows_x86_64_msvc"
 version = "0.48.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1a515f5799fe4961cb532f983ce2b23082366b898e52ffbce459c86f67c8378a"
+
+[[package]]
+name = "zerocopy"
+version = "0.6.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "854e949ac82d619ee9a14c66a1b674ac730422372ccb759ce0c39cabcf2bf8e6"
+dependencies = [
+ "byteorder",
+ "zerocopy-derive",
+]
+
+[[package]]
+name = "zerocopy-derive"
+version = "0.6.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "125139de3f6b9d625c39e2efdd73d41bdac468ccd556556440e322be0e1bbd91"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
 
 [[package]]
 name = "zstd-sys"

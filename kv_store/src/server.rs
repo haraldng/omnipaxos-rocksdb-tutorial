@@ -1,4 +1,3 @@
-use std::time::Duration;
 use crate::database::Database;
 use crate::kv::KVCommand;
 use crate::{
@@ -7,6 +6,7 @@ use crate::{
 };
 use omnipaxos::util::LogEntry;
 use serde::{Deserialize, Serialize};
+use std::time::Duration;
 use tokio::time;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -27,21 +27,19 @@ impl Server {
         let messages = self.network.get_received().await;
         for msg in messages {
             match msg {
-                Message::APIRequest(kv_cmd) => {
-                    match kv_cmd {
-                        KVCommand::Get(key) => {
-                            let value = self.database.handle_command(KVCommand::Get(key.clone()));
-                            let msg = Message::APIResponse(APIResponse::Get(key, value));
-                            self.network.send(0, msg).await;
-                        },
-                        cmd => {
-                            self.omni_paxos.append(cmd).unwrap();
-                        },
+                Message::APIRequest(kv_cmd) => match kv_cmd {
+                    KVCommand::Get(key) => {
+                        let value = self.database.handle_command(KVCommand::Get(key.clone()));
+                        let msg = Message::APIResponse(APIResponse::Get(key, value));
+                        self.network.send(0, msg).await;
                     }
-                }
+                    cmd => {
+                        self.omni_paxos.append(cmd).unwrap();
+                    }
+                },
                 Message::OmniPaxosMsg(msg) => {
                     self.omni_paxos.handle_incoming(msg);
-                },
+                }
                 _ => unimplemented!(),
             }
         }
@@ -59,19 +57,29 @@ impl Server {
 
     async fn handle_decided_entries(&mut self) {
         let new_decided_idx = self.omni_paxos.get_decided_idx();
-        if self.last_decided_idx < new_decided_idx {
-            let decided_entries = self.omni_paxos.read_decided_suffix(self.last_decided_idx).unwrap();
+        if self.last_decided_idx < new_decided_idx as u64 {
+            let decided_entries = self
+                .omni_paxos
+                .read_decided_suffix(self.last_decided_idx as usize)
+                .unwrap();
             self.update_database(decided_entries);
-            self.last_decided_idx = new_decided_idx;
+            self.last_decided_idx = new_decided_idx as u64;
             /*** reply client ***/
-            let msg = Message::APIResponse(APIResponse::Decided(new_decided_idx));
+            let msg = Message::APIResponse(APIResponse::Decided(new_decided_idx as u64));
             self.network.send(0, msg).await;
             // snapshotting
             if new_decided_idx % 5 == 0 {
-                println!("Log before: {:?}", self.omni_paxos.read_decided_suffix(0).unwrap());
-                self.omni_paxos.snapshot(Some(new_decided_idx), true)
+                println!(
+                    "Log before: {:?}",
+                    self.omni_paxos.read_decided_suffix(0).unwrap()
+                );
+                self.omni_paxos
+                    .snapshot(Some(new_decided_idx), true)
                     .expect("Failed to snapshot");
-                println!("Log after: {:?}\n", self.omni_paxos.read_decided_suffix(0).unwrap());
+                println!(
+                    "Log after: {:?}\n",
+                    self.omni_paxos.read_decided_suffix(0).unwrap()
+                );
             }
         }
     }
